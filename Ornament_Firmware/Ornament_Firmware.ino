@@ -39,7 +39,7 @@ int song = 1;
 
 const char PhantHost[] = "data.sparkfun.com";     //Needed for everyone to connect to the same server. 
 const char PublicKey[] = "g6RKzndYWATp0WxXdyNz";
-const char PrivateKey[] = "qznoK1NAEZHGPwR72oxj";
+const char PrivateKey[] = "";  //You can request the private key from me! 
 
 //const char http_site[] = "data.sparkfun.com/output/g6RKzndYWATp0WxXdyNz/latest.json";
 const int http_port = 80;
@@ -92,9 +92,10 @@ void setup() {
   randomSeed(analogRead(A0));
 
   strip.begin();
-  colorWipe(strip.Color(10, 0, 0), 50);
-  //strip.setPixelColor(0, 0,50,0);
-  //strip.show(); // Initialize all pixels to 'off'
+  colorWipe(strip.Color(0, 0, 0), 50);
+  
+  strip.setPixelColor(0, 10,0,0);
+  strip.show(); // Initialize all pixels to 'off'
   
   sleepTimeS = random(120, 240);
   int buttstate = 1;
@@ -140,6 +141,7 @@ void setup() {
   //wifiManager.autoConnect();
 
   Serial.println("Connected");
+  colorWipe(strip.Color(0, 0, 0), 50);
 
 
 }
@@ -151,17 +153,25 @@ void loop() {
   Serial.println(savedCheer);
   if ( !getPage() ) {             //Get lastest cheer value from Phant
     Serial.println("GET request failed");
+    int randomPlay = random(100);
+    if (randomPlay == 10){
+      playSong();
+    }
+    ESP.deepSleep(sleepTimeS * 1000000); //Sleep again if timeout.
   }
 
 
   if (buttpushed == 1) {
+    if (currentCheer != 0){
     newCheer = currentCheer + 1;
     EEPROMWritelong(1, newCheer);
     EEPROM.commit();
     Serial.print("Sending ");
     Serial.print(newCheer);
     Serial.println(" to Phant");
+    
     postToPhant(newCheer);
+    }
     Serial.print("Sleeping for ");
     Serial.print(sleepTimeS);
     Serial.println(" second.");
@@ -181,8 +191,10 @@ void loop() {
     playSong();
 
   }
+  if (currentCheer != 0){
   EEPROMWritelong(1, currentCheer);
   EEPROM.commit();
+  }
   colorWipe(strip.Color(0, 0, 0), 50); // White
   Serial.print("Sleeping for ");
   Serial.print(sleepTimeS);
@@ -290,11 +302,11 @@ bool getPage() {
 
 
 void addCheer() {
-  colorWipe(strip.Color(150, 0, 0), 50); // Red
+  //colorWipe(strip.Color(150, 0, 0), 50); // Red
   playNote(C4, 400);
-  colorWipe(strip.Color(0, 150, 0), 50); // Green
+  //colorWipe(strip.Color(0, 150, 0), 50); // Green
   playNote(G4, 400);
-  colorWipe(strip.Color(150, 150, 150), 50); // White
+  //colorWipe(strip.Color(150, 150, 150), 50); // White
   delay(500);
   noTone(tonepin);
   colorWipe(strip.Color(0, 0, 0), 50); // White
@@ -333,6 +345,7 @@ long EEPROMReadlong(long address)
 
 
 void playSong() {
+  song = random(1,5);
 switch (song) {
     case 1:
       Frosty();
@@ -435,12 +448,12 @@ void playNote(int note, int duration) {
   int p4 = random(0,6);
   int p5 = random(0,6);
   int p6 = random(0,6);
-  strip.setPixelColor(p1, 100,0,0);
-  strip.setPixelColor(p2, 0,100,0);
-  strip.setPixelColor(p3, 100,100,100);
-  strip.setPixelColor(p4, 100,0,0);
-  strip.setPixelColor(p5, 0,100,0);
-  strip.setPixelColor(p6, 100,100,100);
+  strip.setPixelColor(p1, 20,0,0);
+  strip.setPixelColor(p2, 0,20,0);
+  strip.setPixelColor(p3, 20,20,20);
+  strip.setPixelColor(p4, 20,0,0);
+  strip.setPixelColor(p5, 0,20,0);
+  strip.setPixelColor(p6, 20,20,20);
   strip.show();
 }
 
