@@ -39,7 +39,7 @@ int song = 1;
 
 const char PhantHost[] = "data.sparkfun.com";     //Needed for everyone to connect to the same server. 
 const char PublicKey[] = "g6RKzndYWATp0WxXdyNz";
-const char PrivateKey[] = "qznoK1NAEZHGPwR72oxj";
+const char PrivateKey[] = "xxxxxxxxxxxxxxxxxxxxx"; //You can request this from me.
 
 //const char http_site[] = "data.sparkfun.com/output/g6RKzndYWATp0WxXdyNz/latest.json";
 const int http_port = 80;
